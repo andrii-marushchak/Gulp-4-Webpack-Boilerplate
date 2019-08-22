@@ -33,11 +33,11 @@ const paths = {
 function watch() {
     gulp.watch(paths.scss.src, scss);
     gulp.watch(paths.js.src, js);
-    gulp.watch("app/**/*.html", browserSync.reload);
-    gulp.watch("app/**/*.php", browserSync.reload);
-    gulp.watch("app/assets/js/**/**/*.js", browserSync.reload);
-    gulp.watch("app/assets/vendors/**/*", browserSync.reload);
-    gulp.watch(paths.img.src, browserSync.reload);
+    gulp.watch("app/**/*.html", reload);
+    gulp.watch("app/**/*.php", reload);
+    gulp.watch("app/assets/js/**/**/*.js", reload);
+    gulp.watch("app/assets/vendors/**/*", reload);
+    gulp.watch(paths.img.src, reload);
 }
 
 function server() {
@@ -54,6 +54,11 @@ function server() {
             notify: false
         });
     }
+}
+
+function reload(done) {
+    browserSync.reload();
+    done();
 }
 
 function js(done) {
