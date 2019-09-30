@@ -16,6 +16,4 @@ jQuery(document).ready(function ($) {
         browser.h = document.documentElement.clientHeight;
     });
 
-
-
 });

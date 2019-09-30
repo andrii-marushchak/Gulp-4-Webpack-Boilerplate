@@ -109,26 +109,3 @@ gulp.task('img', function (done) {
 });
 
 gulp.task('default', ['watch']);
-
-gulp.task('scss', function () {
-    gulp.src('app/assets/css/**/**/*.scss')
-        .pipe(sourcemaps.init())
-        .pipe(sass().on('error', notify.onError({
-            message: "<%= error.message %>",
-            title: "Sass Error!"
-        })))
-        .pipe(autoprefixer())
-        .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('app/assets/css'))
-        .pipe(browserSync.stream());
-});
-
-gulp.task('browser-sync', function () {
-    browserSync.init({
-        server: {
-            baseDir: 'app'
-        },
-        notify: false
-    });
-});
