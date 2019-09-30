@@ -30,17 +30,17 @@ const paths = {
     }
 };
 
-function watch() {
-    gulp.watch(paths.scss.src, scss);
-    gulp.watch(paths.js.src, js);
-    gulp.watch("app/**/*.html", reload);
-    gulp.watch("app/**/*.php", reload);
-    gulp.watch("app/assets/js/**/**/*.js", reload);
-    gulp.watch("app/assets/vendors/**/*", reload);
-    gulp.watch(paths.img.src, reload);
-}
+gulp.task('watch', ['browser-sync', 'scss', 'js'], function () {
+    gulp.watch(paths.scss.src, ['scss']);
+    gulp.watch(paths.js.src, ['js', 'browser-reload']);
+    gulp.watch("app/**/*.html", ['browser-reload']);
+    gulp.watch("app/**/*.php", ['browser-reload']);
+    gulp.watch("app/assets/js/**/**/*.js", ['browser-reload']);
+    gulp.watch("app/assets/vendors/**/*", ['browser-reload']);
+    gulp.watch(paths.img.src, ['browser-reload']);
+});
 
-function server() {
+gulp.task('browser-sync', function () {
     if (PHPserver) {
         browserSync.init({
             proxy: domain,
@@ -54,14 +54,14 @@ function server() {
             notify: false
         });
     }
-}
+});
 
-function reload(done) {
+gulp.task('browser-reload', function (done) {
     browserSync.reload();
     done();
-}
+});
 
-function js(done) {
+gulp.task('js', function (done) {
     gulp.src(paths.js.src)
         .pipe(sourcemaps.init())
         .pipe(babel({presets: ['@babel/env']}))
@@ -70,9 +70,9 @@ function js(done) {
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.js.dest));
     done();
-}
+});
 
-function scss(done) {
+gulp.task('scss', function (done) {
     return gulp.src(paths.scss.src)
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', notify.onError({
@@ -85,9 +85,9 @@ function scss(done) {
         .pipe(gulp.dest(paths.scss.dest))
         .pipe(browserSync.stream());
     done();
-}
+});
 
-function img(done) {
+gulp.task('img', function (done) {
     gulp.src(paths.img.src)
         .pipe(imagemin([
             imagemin.gifsicle({interlaced: true}),
@@ -96,21 +96,39 @@ function img(done) {
             imagemin.svgo({
                 plugins: [
                     {removeViewBox: true},
-                    {cleanupIDs: true}
+                    {cleanupIDs: false}
                 ]
             })
 
         ]))
-        .pipe(image())
+        .pipe(image({
+            svgo: false
+        }))
         .pipe(gulp.dest(paths.img.dest));
     done();
-}
+});
 
-exports.scss = scss;
-exports.js = js;
-exports.img = img;
+gulp.task('default', ['watch']);
 
-gulp.task('default', gulp.series(
-    gulp.parallel(scss, js),
-    gulp.parallel(server, watch)
-));
+gulp.task('scss', function () {
+    gulp.src('app/assets/css/**/**/*.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass().on('error', notify.onError({
+            message: "<%= error.message %>",
+            title: "Sass Error!"
+        })))
+        .pipe(autoprefixer())
+        .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('app/assets/css'))
+        .pipe(browserSync.stream());
+});
+
+gulp.task('browser-sync', function () {
+    browserSync.init({
+        server: {
+            baseDir: 'app'
+        },
+        notify: false
+    });
+});
