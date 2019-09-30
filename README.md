@@ -1,8 +1,8 @@
 ### Run Server
 
-Set **PHPserver** to true if you need proxy server
+Set **ProxyServer** to true if you need proxy server
 ```js
-const PHPserver = false;
+const ProxyServer = false;
 const domain = 'localhost/gulp/app';
 const root = 'app';
 ```
@@ -12,13 +12,13 @@ npm i
 gulp
 ```
 
-### Just Compile .SCSS
+### Compile .SCSS
 
 ```bash
 gulp scss
 ```
 
-### Just Compress .JS
+### Compress .JS
 
 ```bash
 gulp js

@@ -11,9 +11,30 @@ const gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     image = require('gulp-image');
 
-const PHPserver = false;
+const ProxyServer = false;
 const domain = 'localhost/gulp/app';
 const root = 'app';
+
+gulp.task('browser-sync', function () {
+    if (ProxyServer) {
+        browserSync.init({
+            proxy: domain,
+            notify: false
+        });
+    } else {
+        browserSync.init({
+            server: {
+                baseDir: root
+            },
+            notify: false
+        });
+    }
+});
+
+gulp.task('browser-reload', function (done) {
+    browserSync.reload();
+    done();
+});
 
 const paths = {
     scss: {
@@ -38,27 +59,6 @@ gulp.task('watch', ['browser-sync', 'scss', 'js'], function () {
     gulp.watch("app/assets/js/**/**/*.js", ['browser-reload']);
     gulp.watch("app/assets/vendors/**/*", ['browser-reload']);
     gulp.watch(paths.img.src, ['browser-reload']);
-});
-
-gulp.task('browser-sync', function () {
-    if (PHPserver) {
-        browserSync.init({
-            proxy: domain,
-            notify: false
-        });
-    } else {
-        browserSync.init({
-            server: {
-                baseDir: root
-            },
-            notify: false
-        });
-    }
-});
-
-gulp.task('browser-reload', function (done) {
-    browserSync.reload();
-    done();
 });
 
 gulp.task('js', function (done) {
