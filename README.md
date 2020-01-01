@@ -12,6 +12,19 @@ npm i
 gulp
 ```
 
+
+### Run Watcher
+
+```bash
+gulp
+```
+
+### Build Project
+
+```bash
+gulp build
+```
+
 ### Compile .SCSS
 
 ```bash
@@ -29,4 +42,5 @@ gulp js
 ```bash
 gulp img
 ```
+
 

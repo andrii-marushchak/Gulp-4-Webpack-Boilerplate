@@ -7,47 +7,12 @@
   }
 }
 
-.transition {
-  @include transition;
-}
-
-.bg-transparent {
-  background: transparent !important;
-}
-
 .overflow-hidden {
   overflow: hidden;
 }
 
-// Position
 .relative {
   position: relative;
-}
-
-.abosolute {
-  position: absolute;
-}
-
-.fixed {
-  position: fixed;
-}
-
-.static {
-  position: static;
-}
-
-
-// Text
-.uppercase {
-  text-transform: uppercase;
-}
-
-.text-decoration-none {
-  text-decoration: none !important;
-
-  a {
-    text-decoration: none !important;
-  }
 }
 
 .aligncenter, .center {

@@ -10,8 +10,7 @@ jQuery(document).ready(function ($) {
         w: document.documentElement.clientWidth,
         h: document.documentElement.clientHeight,
     };
-
-    $(window).on('resize', () => {
+    $(window).on('resize orientationchange', () => {
         browser.w = document.documentElement.clientWidth;
         browser.h = document.documentElement.clientHeight;
     });
