@@ -4,12 +4,13 @@ const gulp = require('gulp'),
     browserSync = require('browser-sync').create(),
     autoprefixer = require('gulp-autoprefixer'),
     cleanCSS = require('gulp-clean-css'),
-    babel = require('gulp-babel'),
+    babel = require('gulp-babel'),  // npm install --save-dev gulp-babel @babel/core @babel/preset-env
     rename = require("gulp-rename"),
     uglify = require('gulp-uglify-es').default,
     imagemin = require('gulp-imagemin'),
     image = require('gulp-image'),
     clean = require('gulp-clean'),
+    notify = require('gulp-notify'),
     htmlmin = require('gulp-htmlmin');
 
 const ProxyServer = false;
@@ -127,7 +128,10 @@ function js(done) {
 function scss(done) {
     return gulp.src(paths.scss.src)
         .pipe(sourcemaps.init())
-        .pipe(sass())
+        .pipe(sass().on('error', notify.onError({
+            message: "<%= error.message %>",
+            title: "Sass Error!"
+        })))
         .pipe(autoprefixer({
             overrideBrowserslist: ["> 0.1%",
                 "last 5 versions",
