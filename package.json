@@ -1,8 +1,17 @@
 {
-  "name": "boilerplate",
-  "version": "1.0.0",
+  "name": "grebec-starter-pack-gulp-app",
+  "version": "2.0.0",
   "description": "Set **ProxyServer** to true if you need proxy server\r ```js\r const ProxyServer = false;\r const domain = 'localhost/gulp/app';\r const root = 'app';\r ```",
   "main": "gulpfile.js",
+  "dependencies": {
+    "gulp-clean-css": "^4.3.0",
+    "gulp-image": "^6.2.0",
+    "gulp-notifier": "^1.0.6",
+    "gulp-notify": "^3.2.0",
+    "gulp-sass": "^4.1.0",
+    "npm": "^6.14.5"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,25 +24,5 @@
   "bugs": {
     "url": "https://github.com/DifferThemes/Grebec-Starter-Pack-GULP-App/issues"
   },
-  "homepage": "https://github.com/DifferThemes/Grebec-Starter-Pack-GULP-App#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
-    "browser-sync": "^2.26.7",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
-    "gulp-babel": "^8.0.0",
-    "gulp-clean": "^0.4.0",
-    "gulp-clean-css": "^4.2.0",
-    "gulp-group-css-media-queries": "^1.2.2",
-    "gulp-htmlmin": "^5.0.1",
-    "gulp-image": "^6.0.0",
-    "gulp-imagemin": "^6.2.0",
-    "gulp-notify": "^3.2.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify-es": "^2.0.0"
-  }
+  "homepage": "https://github.com/DifferThemes/Grebec-Starter-Pack-GULP-App#readme"
 }

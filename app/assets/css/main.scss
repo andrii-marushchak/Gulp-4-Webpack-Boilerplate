@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
+// SCSS/CSS Variables
+@import "vars";
+
 // Reset Browsers CSS
 @import "other/reset";
 
 // Old Browsers placeholder
 @import "other/old-browser";
-
-// SCSS/CSS Variables
-@import "vars";
 
 // Mixins
 @import "other/mixins";
@@ -17,8 +17,6 @@
 
 // Bootstrap 4 Grid
 @import "other/grid";
-
-
 
 // Core Styles -- must be latest
 @import "core";

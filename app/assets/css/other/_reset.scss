@@ -118,6 +118,7 @@ button, select, input, textarea, label {
   border: none;
   outline: none;
   background: unset;
+  appearance: none;
 }
 
 [type=button], [type=reset], [type=submit], button {
@@ -168,6 +169,17 @@ body, button, input, optgroup, select, textarea {
   font-family: sans-serif;
   font-size: 1rem;
   line-height: 1.5
+}
+
+select {
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+input {
+  border-radius: 0;
+  box-shadow: none;
 }
 
 cite, dfn, em, i {
@@ -255,7 +267,7 @@ input {
   appearance: none;
 
   &[type=search] {
-    appearance: textfield;
+    appearance: none;
     outline: none;
   }
 

@@ -1,11 +1,9 @@
 const gulp = require('gulp'),
     sass = require('gulp-sass'),
-    notify = require('gulp-notify'),
     sourcemaps = require('gulp-sourcemaps'),
     browserSync = require('browser-sync').create(),
     autoprefixer = require('gulp-autoprefixer'),
     cleanCSS = require('gulp-clean-css'),
-    gcmq = require('gulp-group-css-media-queries'),
     babel = require('gulp-babel'),
     rename = require("gulp-rename"),
     uglify = require('gulp-uglify-es').default,
@@ -18,10 +16,9 @@ const ProxyServer = false;
 const domain = 'localhost/gulp/app';
 const root = 'app';
 
-
 const paths = {
     scss: {
-        src: 'app/assets/css/**/*.scss',
+        src: ['app/assets/css/*.scss', 'app/assets/css/other/*.scss', 'app/assets/css/components/*.scss', 'app/assets/css/pages/*.scss'],
         dest: 'app/assets/css'
     },
     js: {
@@ -118,11 +115,10 @@ function watch() {
 
 function js(done) {
     return gulp.src(paths.js.src)
-
         .pipe(sourcemaps.init())
         .pipe(babel({presets: ['@babel/env']}))
         .pipe(rename("main.min.js"))
-       // .pipe(uglify())
+        .pipe(uglify())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.js.dest));
     done();
@@ -131,12 +127,16 @@ function js(done) {
 function scss(done) {
     return gulp.src(paths.scss.src)
         .pipe(sourcemaps.init())
-        .pipe(sass().on('error', notify.onError({
-            message: "<%= error.message %>",
-            title: "Sass Error!"
-        })))
-        .pipe(autoprefixer())
-       // .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(sass())
+        .pipe(autoprefixer({
+            overrideBrowserslist: ["> 0.1%",
+                "last 5 versions",
+                "ie >= 11",
+                "ie < 11"],
+            cascade: false,
+            grid: true
+        }))
+        .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.scss.dest))
         .pipe(browserSync.stream());
@@ -164,8 +164,6 @@ function img(done) {
 }
 
 
-
-
 /* Build Tasks */
 function clean_build(done) {
     // Clean Build Folder
@@ -186,7 +184,7 @@ function build_js(done) {
 }
 
 function build_html(done) {
-    return gulp.src(buildPaths.html.src)
+    return gulp.src(buildPaths.html.src).pipe(htmlmin({collapseWhitespace: true}))
         .pipe(gulp.dest(buildPaths.html.build));
     done();
 }
@@ -250,7 +248,6 @@ function build_icons(done) {
 }
 
 
-
 exports.serve = serve;
 exports.reload = reload;
 exports.watch = watch;
@@ -299,7 +296,7 @@ exports.build = gulp.series(
         build_php,
 
         // Build Images
-        gulp.series(/*img,*/ build_img),
+        gulp.series(build_img),
     )
 );
 
