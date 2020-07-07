@@ -4,7 +4,7 @@
   "description": "Set **ProxyServer** to true if you need proxy server\r ```js\r const ProxyServer = false;\r const domain = 'localhost/gulp/app';\r const root = 'app';\r ```",
   "main": "gulpfile.js",
   "dependencies": {
-    "npm": "^6.14.5"
+    "npm": "^6.14.6"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
