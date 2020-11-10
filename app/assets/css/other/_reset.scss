@@ -33,18 +33,6 @@ html body input, textarea {
   }
 }
 
-@-webkit-keyframes autofill {
-  to {
-    color: inherit;
-    background: transparent;
-  }
-}
-
-input:-webkit-autofill,
-textarea:-webkit-autofill {
-  -webkit-animation-name: autofill;
-  -webkit-animation-fill-mode: both;
-}
 
 button, input, hr, optgroup, select, textarea, p, h1, h2, h3, h4, h5, h6 {
   margin: 0
