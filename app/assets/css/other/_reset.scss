@@ -9,6 +9,8 @@ body {
   padding: 0;
   outline: 0;
   box-sizing: border-box;
+  overflow-anchor: none;
+
 
   &::after, &::before {
     -webkit-box-sizing: inherit;
