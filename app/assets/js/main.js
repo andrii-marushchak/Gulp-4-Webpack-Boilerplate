@@ -11,10 +11,9 @@ jQuery(document).ready(function ($) {
     // Browser Windows Sizes
     const browser = {
         w: document.documentElement.clientWidth,
-        h: document.documentElement.clientHeight,
+        h: document.documentElement.clientHeight
     };
 
-    
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
