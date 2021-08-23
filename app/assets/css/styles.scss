@@ -6,17 +6,20 @@
 // Reset Browsers CSS
 @import "other/reset";
 
-// Old Browsers placeholder
-@import "other/old-browser";
-
 // Mixins
 @import "other/mixins";
+
+// Grid
+@import "other/grid";
+
+// Typography
+@import "other/typography";
 
 // Utility CSS
 @import "other/utility";
 
-// Bootstrap 4 Grid
-@import "other/grid";
-
 // Core Styles -- must be latest
 @import "core";
+
+
+

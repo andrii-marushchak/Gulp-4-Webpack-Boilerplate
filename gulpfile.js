@@ -1,87 +1,48 @@
 const gulp = require('gulp'),
-    sass = require('gulp-sass'),
-    sourcemaps = require('gulp-sourcemaps'),
+    webpack = require("webpack-stream"),
     browserSync = require('browser-sync').create(),
-    autoprefixer = require('gulp-autoprefixer'),
-    cleanCSS = require('gulp-clean-css'),
-    babel = require('gulp-babel'),  // npm install --save-dev gulp-babel @babel/core @babel/preset-env
-    rename = require("gulp-rename"),
+    babel = require('gulp-babel'),
     uglify = require('gulp-uglify-es').default,
+    sass = require("gulp-sass"),
+    cleanCSS = require('gulp-clean-css'),
+    autoprefixer = require('gulp-autoprefixer'),
+    through = require('through2'),
+    sourcemaps = require('gulp-sourcemaps'),
+    rename = require("gulp-rename"),
+    del = require("del"),
+    plumber = require("gulp-plumber"),
     imagemin = require('gulp-imagemin'),
-    image = require('gulp-image'),
-    clean = require('gulp-clean'),
-    notify = require('gulp-notify'),
-    htmlmin = require('gulp-htmlmin');
+    image = require('gulp-image');
 
 const ProxyServer = false;
-const domain = 'localhost/gulp/app';
-const root = 'app';
+const domain = 'localhost/app-name';
+const webpackModules = true;
+const baseDir = 'app';
 
 const paths = {
+    html: {
+        src: 'app/**/*.html',
+        dest: 'app/'
+    },
     scss: {
-        src: ['app/assets/css/*.scss', 'app/assets/css/other/*.scss', 'app/assets/css/components/*.scss', 'app/assets/css/pages/*.scss'],
-        dest: 'app/assets/css'
+        src: [
+            'app/assets/css/*.scss',
+            'app/assets/css/components/*.scss',
+            'app/assets/css/other/*.scss',
+            'app/assets/css/pages/*.scss',
+            'app/assets/css/sections/*.scss',
+        ],
+        dest: 'app/assets/dist/css/'
     },
     js: {
-        src: 'app/assets/js/main.js',
-        dest: 'app/assets/js/'
+        src: ['app/assets/js/scripts.js', 'app/assets/js/components/**/*.js', 'app/assets/js/**/*.js'],
+        dest: 'app/assets/dist/js/'
     },
     img: {
         src: 'app/assets/img/**/**/*',
         dest: 'app/assets/img/'
     },
-    html: {
-        src: 'app/**/*.html',
-        dest: 'app/'
-    }
 };
-
-const buildPaths = {
-    css: {
-        src: ['app/assets/css/main.css'],
-        build: 'build/assets/css/'
-    },
-    js: {
-        src: 'app/assets/js/main.min.js',
-        build: 'build/assets/js/'
-    },
-    html: {
-        src: 'app/**/*.html',
-        build: 'build/'
-    },
-    php: {
-        src: 'app/**/*.php',
-        build: 'build/'
-    },
-    img: {
-        src: 'app/assets/img/**/**/*',
-        build: 'build/assets/img/'
-    },
-    video: {
-        src: 'app/assets/video/**/**/*',
-        build: 'build/assets/video/'
-    },
-    audio: {
-        src: 'app/assets/audio/**/**/*',
-        build: 'build/assets/audio/'
-    },
-    vendors: {
-        src: 'app/assets/vendors/**/**/**/**/**/*',
-        build: 'build/assets/vendors/'
-    },
-    fonts: {
-        src: 'app/assets/fonts/**/*',
-        build: 'build/assets/fonts/'
-    },
-    favicon: {
-        src: 'app/assets/favicon/**/*',
-        build: 'build/assets/favicon/'
-    },
-    icons: {
-        src: 'app/assets/icons/**/*',
-        build: 'build/assets/icons/'
-    }
-}
 
 function serve() {
     if (ProxyServer) {
@@ -92,12 +53,17 @@ function serve() {
     } else {
         browserSync.init({
             server: {
-                baseDir: root
+                baseDir: baseDir
             },
             notify: false
         });
     }
 }
+
+function cleanFolder() {
+    return del('app/assets/dist');
+}
+
 
 function reload(done) {
     browserSync.reload();
@@ -105,43 +71,69 @@ function reload(done) {
 }
 
 function watch() {
+    // SCSS
     gulp.watch(paths.scss.src, gulp.series(scss));
-    gulp.watch(paths.js.src, gulp.series(js, reload));
-    gulp.watch("app/**/*.html", reload);
-    gulp.watch("app/**/*.php", reload);
-    gulp.watch("app/assets/js/**/**/*.js", gulp.series(reload));
+
+    // JS
+    gulp.watch(['app/assets/js/*.js', 'app/assets/js/components/*.js'], gulp.series(js));
+
+    // HTML
+    gulp.watch(paths.html.src, gulp.series(reload));
+
+    // Vendors folder
     gulp.watch("app/assets/vendors/**/**/*", gulp.series(reload));
+
+    // Images
     gulp.watch(paths.img.src, gulp.series(reload));
 }
 
-function js(done) {
-    return gulp.src(paths.js.src)
-        .pipe(sourcemaps.init())
-        .pipe(babel({presets: ['@babel/env']}))
-        .pipe(rename("main.min.js"))
-        .pipe(uglify())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(paths.js.dest));
-    done();
+
+if (webpackModules) {
+    function js(done) {
+        return gulp.src(paths.js.src)
+            .pipe(plumber())
+            .pipe(webpack({
+                config: require('./webpack.config.js')
+            }))
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(through.obj(function (file, enc, cb) {
+                const isSourceMap = /\.map$/.test(file.path);
+                if (!isSourceMap) this.push(file);
+                cb();
+            }))
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest(paths.js.dest))
+            .pipe(browserSync.stream())
+        done();
+    }
+} else {
+    function js(done) {
+        return gulp.src(paths.js.src)
+            .pipe(plumber())
+            .pipe(sourcemaps.init())
+            .pipe(babel({presets: ['@babel/env']}))
+            .pipe(rename("scripts.min.js"))
+            .pipe(uglify())
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest(paths.js.dest))
+            .pipe(browserSync.stream());
+        done();
+    }
 }
 
 function scss(done) {
     return gulp.src(paths.scss.src)
+        .pipe(plumber())
         .pipe(sourcemaps.init())
-        .pipe(sass().on('error', notify.onError({
-            message: "<%= error.message %>",
-            title: "Sass Error!"
-        })))
+        .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
-            overrideBrowserslist: ["> 0.1%",
-                "last 5 versions",
-                "ie >= 11",
-                "ie < 11"],
+            overrideBrowserslist: ["last 10 versions"],
             cascade: false,
             grid: true
         }))
-        .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(sourcemaps.write('.'))
+        .pipe(cleanCSS())
+        .pipe(rename("main.min.css"))
+        .pipe(sourcemaps.write('../css'))
         .pipe(gulp.dest(paths.scss.dest))
         .pipe(browserSync.stream());
     done();
@@ -167,141 +159,12 @@ function img(done) {
     done();
 }
 
-
-/* Build Tasks */
-function clean_build(done) {
-    // Clean Build Folder
-    return gulp.src('build/*').pipe(clean({  /* force: true  */}));
-    done();
-}
-
-function build_css(done) {
-    return gulp.src(buildPaths.css.src)
-        .pipe(gulp.dest(buildPaths.css.build));
-    done();
-}
-
-function build_js(done) {
-    return gulp.src(buildPaths.js.src)
-        .pipe(gulp.dest(buildPaths.js.build));
-    done();
-}
-
-function build_html(done) {
-    return gulp.src(buildPaths.html.src).pipe(htmlmin({collapseWhitespace: true}))
-        .pipe(gulp.dest(buildPaths.html.build));
-    done();
-}
-
-function html_minify(done) {
-    return gulp.src(buildPaths.html.src)
-        .pipe(htmlmin({
-            collapseWhitespace: true,
-            ignoreCustomFragments: [/<%[\s\S]*?%>/, /<\?[=|php]?[\s\S]*?\?>/]
-        }))
-        .pipe(gulp.dest(buildPaths.html.build));
-    done();
-}
-
-function build_php(done) {
-    return gulp.src(buildPaths.php.src)
-        .pipe(gulp.dest(buildPaths.php.build));
-    done();
-}
-
-function build_vendors(done) {
-    return gulp.src(buildPaths.vendors.src)
-        .pipe(gulp.dest(buildPaths.vendors.build));
-    done();
-}
-
-function build_fonts(done) {
-    return gulp.src(buildPaths.fonts.src)
-        .pipe(gulp.dest(buildPaths.fonts.build));
-    done();
-}
-
-function build_img(done) {
-    return gulp.src(buildPaths.img.src)
-        .pipe(gulp.dest(buildPaths.img.build));
-    done();
-}
-
-function build_video(done) {
-    return gulp.src(buildPaths.video.src)
-        .pipe(gulp.dest(buildPaths.video.build));
-    done();
-}
-
-function build_audio(done) {
-    return gulp.src(buildPaths.audio.src)
-        .pipe(gulp.dest(buildPaths.audio.build));
-    done();
-}
-
-function build_favicon(done) {
-    return gulp.src(buildPaths.favicon.src)
-        .pipe(gulp.dest(buildPaths.favicon.build));
-    done();
-}
-
-function build_icons(done) {
-    return gulp.src(buildPaths.icons.src)
-        .pipe(gulp.dest(buildPaths.icons.build));
-    done();
-}
-
-
 exports.serve = serve;
 exports.reload = reload;
 exports.watch = watch;
 exports.js = js;
 exports.scss = scss;
 exports.img = img;
-exports.default = gulp.series(gulp.parallel(scss, js), gulp.parallel(watch, serve));
-
-exports.clean_build = clean_build;
-exports.build = gulp.series(
-    // Clean Build Folder
-    clean_build,
-
-    // Compile CSS, JS
-    gulp.parallel(scss, js),
-
-    gulp.parallel(
-        // Build CSS
-        build_css,
-
-        // Build JS
-        build_js,
-
-        // Build Vendors
-        build_vendors,
-
-        // Build Fonts
-        build_fonts,
-
-        // Build Video
-        build_video,
-
-        // Build Audio
-        build_audio,
-
-        // Build Audio
-        build_favicon,
-
-        // Build Audio
-        build_icons,
-
-        // Build HTML
-        gulp.series(build_html, html_minify),
-
-        // Build PHP
-        build_php,
-
-        // Build Images
-        gulp.series(build_img),
-    )
-);
+exports.default = gulp.series(cleanFolder, gulp.parallel(scss, js), gulp.parallel(watch, serve));
 
 

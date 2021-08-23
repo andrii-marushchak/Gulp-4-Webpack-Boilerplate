@@ -1,15 +1,26 @@
 {
-  "name": "gulp-4-build-boilerplate",
-  "version": "1.0.0",
+  "name": "nsf-01",
+  "version": "2.0.0",
   "description": "Set **ProxyServer** to true if you need proxy server\r ```js\r const ProxyServer = false;\r const domain = 'localhost/gulp/app';\r const root = 'app';\r ```",
   "main": "gulpfile.js",
   "dependencies": {
-    "npm": "^6.14.11"
+    "get-scrollbar-width": "^1.0.5",
+    "jquery": "^3.6.0",
+    "npm": "^6.14.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "browser-sync": "^2.26.13",
+    "del": "^6.0.0",
+    "node-sass": "^4.14.1",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-dynamic-import-node-babel-7": "^2.0.7",
+    "babel-plugin-root-import": "^6.6.0",
+    "through2": "^3.0.1",
+    "webpack-stream": "^6.1.2",
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "babel-polyfill": "^6.26.0",
+    "browser-sync": "^2.27.5",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-babel": "^8.0.0",
@@ -19,22 +30,17 @@
     "gulp-image": "^6.2.1",
     "gulp-imagemin": "^7.1.0",
     "gulp-notify": "^3.2.0",
+    "gulp-plumber": "^1.2.1",
     "gulp-rename": "^2.0.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-uglify-es": "^2.0.0"
+    "gulp-sass": "^4.1.1",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify-es": "^2.0.0",
+    "plumber": "^0.4.8",
+    "webpack": "^5.51.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DifferThemes/Gulp-4-Build-Boilerplate.git"
+    "start": "gulp"
   },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/DifferThemes/Gulp-4-Build-Boilerplate/issues"
-  },
-  "homepage": "https://github.com/DifferThemes/Gulp-4-Build-Boilerplate#readme"
+  "license": "ISC"
 }

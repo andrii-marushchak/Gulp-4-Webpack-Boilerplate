@@ -1,10 +1,10 @@
 ### Run Server
 
-Set **ProxyServer** to true if you need proxy server
+Set **ProxyServer** to true if you need proxy server \
+Set **webpackModules** if you want to use ES6 imports
 ```js
 const ProxyServer = false;
-const domain = 'localhost/gulp/app';
-const root = 'app';
+const webpackModules = true;
 ```
 
 ```bash
@@ -19,19 +19,13 @@ gulp
 gulp
 ```
 
-### Build Project
-
-```bash
-gulp build
-```
-
 ### Compile .SCSS
 
 ```bash
 gulp scss
 ```
 
-### Compress .JS
+### Compile .JS
 
 ```bash
 gulp js

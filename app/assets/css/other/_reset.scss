@@ -1,42 +1,34 @@
-body {
-  padding: 0;
-  margin: 0;
-  overflow-x: hidden !important;
-}
-
 * {
   margin: 0;
   padding: 0;
   outline: 0;
   box-sizing: border-box;
   overflow-anchor: none;
-
-
+  
   &::after, &::before {
     -webkit-box-sizing: inherit;
     box-sizing: inherit;
     outline: 0
   }
-
+  
   &:active, &:focus, &:hover, &:visited {
     outline: 0;
     -webkit-tap-highlight-color: transparent
   }
 }
 
-
-/* Webkit autofill background fix */
-html body input, textarea {
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus,
-  &:-webkit-autofill:active {
-    transition: background-color 500000s ease-in-out 0s !important;
-  }
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%
 }
 
+body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden !important;
+}
 
-button, input, hr, optgroup, select, textarea, p, h1, h2, h3, h4, h5, h6 {
+button, input, hr, optgroup, select, textarea, br, p, h1, h2, h3, h4, h5, h6, blockquote, address {
   margin: 0
 }
 
@@ -45,28 +37,30 @@ progress, sub, sup {
 }
 
 pre, code {
-  overflow: auto
+  overflow: auto;
+  background: #eee;
+  font-family: "Courier 10 Pitch", Courier, monospace;
+  font-size: .9375rem;
+  line-height: 1.6;
+  margin-bottom: 1.6em;
+  padding: 1.6em;
+  color: #000
 }
 
-embed, iframe, img, legend, object, pre, details {
+embed, iframe, img, legend, object, pre, details, figure, video, audio, picture {
   max-width: 100%;
   display: block;
   border: 0;
   outline: 0
 }
 
-html {
-  line-height: 1.15;
-  -webkit-text-size-adjust: 100%
-}
-
 a {
   background-color: transparent;
   text-decoration: unset;
   color: unset;
-
+  
   &:active, &:focus, &:hover, &:visited {
-    color: unset;
+    color: inherit;
     text-decoration: unset;
   }
 }
@@ -75,9 +69,8 @@ b, strong {
   font-weight: bold;
 }
 
-code, kbd, samp, pre {
-  font-family: monospace, monospace;
-  font-size: 1em
+i, em {
+  font-style: italic;
 }
 
 small {
@@ -103,96 +96,16 @@ img {
   height: auto
 }
 
-button, select, input, textarea, label {
-  text-transform: unset;
-  border: none;
-  outline: none;
-  background: unset;
-  appearance: none;
-}
-
-[type=button], [type=reset], [type=submit], button {
-  -webkit-appearance: button
-}
-
-[type=button]::-moz-focus-inner, [type=reset]::-moz-focus-inner, [type=submit]::-moz-focus-inner, button::-moz-focus-inner {
-  border-style: none;
-  padding: 0
-}
-
-[type=button]:-moz-focusring, [type=reset]:-moz-focusring, [type=submit]:-moz-focusring, button:-moz-focusring {
-  outline: ButtonText dotted 1px
-}
-
-textarea {
-  width: 100%;
-  display: block;
-  resize: vertical;
-}
-
-[type=checkbox], [type=radio] {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0
-}
-
-[type=number]::-webkit-inner-spin-button, [type=number]::-webkit-outer-spin-button {
-  height: auto
-}
-
-[type=search]::-webkit-search-decoration {
-  -webkit-appearance: none
-}
-
-::-webkit-file-upload-button {
-  -webkit-appearance: button;
-  font: inherit
-}
-
 
 .hide, .hidden, [hidden] {
   display: none
 }
 
-body, button, input, optgroup, select, textarea {
-  color: #404040;
-  font-family: sans-serif;
-  font-size: 1rem;
-  line-height: 1.5
-}
-
-select {
-  &::-ms-expand {
-    display: none;
-  }
-}
-
-input {
-  border-radius: 0;
-  box-shadow: none;
-}
 
 cite, dfn, em, i {
   font-style: italic
 }
 
-blockquote {
-  margin: 0 1.5em
-}
-
-address {
-  margin: 0 0 1.5em
-}
-
-pre {
-  background: #eee;
-  font-family: "Courier 10 Pitch", Courier, monospace;
-  font-size: .9375rem;
-  line-height: 1.6;
-  margin-bottom: 1.6em;
-  padding: 1.6em;
-  color: #000
-}
 
 code, kbd, tt, var {
   font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
@@ -213,19 +126,29 @@ big {
   font-size: 125%
 }
 
-ol, ul {
-  margin: 0;
-  padding: 0;
+
+// Lists
+ul {
   list-style-type: none;
 }
 
-ol {
-  list-style-type: decimal;
-}
-
-li > ol, li > ul {
+ol, ul {
   margin: 0;
   padding: 0;
+  
+  li {
+    ol, ul {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+
+// Table
+table {
+  margin: 0;
+  width: auto
 }
 
 dt {
@@ -236,36 +159,91 @@ dd {
   margin: 0 1.5em 1.5em
 }
 
-figure {
-  margin: 0
-}
 
-table {
+// Forms
+input, textarea {
+  padding: 0;
   margin: 0;
-  width: auto
-}
-
-input[type=color]:focus, input[type=date]:focus, input[type=datetime-local]:focus, input[type=datetime]:focus, input[type=email]:focus, input[type=month]:focus, input[type=number]:focus, input[type=password]:focus, input[type=range]:focus, input[type=search]:focus, input[type=tel]:focus, input[type=text]:focus, input[type=time]:focus, input[type=url]:focus, input[type=week]:focus, textarea:focus {
-  color: inherit;
-}
-
-a:active, a:focus, a:hover {
-  color: inherit
-}
-
-input {
   appearance: none;
-
-  &[type=search] {
+  outline: none;
+  color: inherit;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  
+  
+  &::placeholder {
+    font-size: inherit;
+    color: inherit;
+  }
+  
+  &:focus, &:hover, &:active, &.focus-visible, &.focus-within {
     appearance: none;
     outline: none;
+    color: inherit;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    
+    &::placeholder {
+      font-size: inherit;
+      color: inherit;
+    }
   }
-
+  
+  
   &::-webkit-search-cancel-button {
     display: none;
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
   }
+  
+  
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    transition: background-color 500000s ease-in-out 0s !important;
+  }
 }
 
+select {
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+button, select, input, textarea, label {
+  text-transform: unset;
+  border: none;
+  outline: none;
+  background: unset;
+  appearance: none;
+}
+
+[type=button], [type=reset], [type=submit], button {
+  -webkit-appearance: button
+}
+
+[type=button]::-moz-focus-inner, [type=reset]::-moz-focus-inner, [type=submit]::-moz-focus-inner, button::-moz-focus-inner {
+  border-style: none;
+  padding: 0
+}
+
+[type=button]:-moz-focusring, [type=reset]:-moz-focusring, [type=submit]:-moz-focusring, button:-moz-focusring {
+  outline: none
+}
+
+[type=number]::-webkit-inner-spin-button, [type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+
+[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit
+}
