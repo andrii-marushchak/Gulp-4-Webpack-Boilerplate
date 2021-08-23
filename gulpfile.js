@@ -132,7 +132,7 @@ function scss(done) {
             grid: true
         }))
         .pipe(cleanCSS())
-        .pipe(rename("main.min.css"))
+        .pipe(rename("styles.min.css"))
         .pipe(sourcemaps.write('../css'))
         .pipe(gulp.dest(paths.scss.dest))
         .pipe(browserSync.stream());
