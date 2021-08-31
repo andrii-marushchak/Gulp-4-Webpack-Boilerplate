@@ -12,20 +12,16 @@ function setVhCSSVariable() {
 
 // Set scrollbar width css variable
 function setScrollbarWidthCSSVariable() {
-    document.documentElement.style.setProperty('--scroll-width', getScrollbarWidth() + 'px');
+    if (document.documentElement.clientHeight < document.querySelector('body').clientHeight) {
+        document.documentElement.style.setProperty('--scroll-width', getScrollbarWidth() + 'px');
+    } else {
+        document.documentElement.style.setProperty('--scroll-width', '0px');
+    }
 }
 
-// Browser Windows Sizes
-const browser = {
-    w: document.documentElement.clientWidth,
-    h: document.documentElement.clientHeight
-};
-
 // Update Browser Windows Sizes
-["resize", "orientationchange"].forEach(event => {
+["resize", "orientationchange", "popstate", "hashchange"].forEach(event => {
     window.addEventListener(event, () => {
-        browser.w = document.documentElement.clientWidth
-        browser.h = document.documentElement.clientHeight
         setVhCSSVariable()
         setScrollbarWidthCSSVariable()
     });
@@ -35,13 +31,11 @@ const browser = {
 setVhCSSVariable()
 setScrollbarWidthCSSVariable();
 
-
 jQuery(document).ready(function ($) {
     "use strict"
 
 
 });
-
 
 document.addEventListener("DOMContentLoaded", function (event) {
     "use strict";
