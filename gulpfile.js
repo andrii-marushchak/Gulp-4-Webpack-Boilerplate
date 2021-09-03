@@ -143,7 +143,7 @@ function img(done) {
     return gulp.src(paths.img.src)
         .pipe(imagemin([
             imagemin.gifsicle({interlaced: true}),
-            imagemin.jpegtran({progressive: true}),
+            imagemin.mozjpeg({progressive: true}),
             imagemin.optipng({optimizationLevel: 5}),
             imagemin.svgo({
                 plugins: [
