@@ -25,11 +25,7 @@ html {
 body {
   padding: 0;
   margin: 0;
-  overflow-x: hidden !important;
-}
-
-button, input, hr, optgroup, select, textarea, br, p, h1, h2, h3, h4, h5, h6, blockquote, address {
-  margin: 0
+  overflow-x: hidden;
 }
 
 progress, sub, sup {
@@ -69,12 +65,12 @@ b, strong {
   font-weight: bold;
 }
 
-i, em {
-  font-style: italic;
-}
-
 small {
   font-size: 80%
+}
+
+big {
+  font-size: 125%;
 }
 
 sub, sup {
@@ -96,36 +92,13 @@ img {
   height: auto
 }
 
-
 .hide, .hidden, [hidden] {
   display: none
 }
 
-
 cite, dfn, em, i {
   font-style: italic
 }
-
-
-code, kbd, tt, var {
-  font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
-  font-size: .9375rem
-}
-
-abbr, acronym {
-  border-bottom: 1px dotted #666;
-  cursor: help
-}
-
-ins, mark {
-  background: #fff9c0;
-  text-decoration: none
-}
-
-big {
-  font-size: 125%
-}
-
 
 // Lists
 ul {
@@ -150,15 +123,6 @@ table {
   margin: 0;
   width: auto
 }
-
-dt {
-  font-weight: 700
-}
-
-dd {
-  margin: 0 1.5em 1.5em
-}
-
 
 // Forms
 input, textarea {

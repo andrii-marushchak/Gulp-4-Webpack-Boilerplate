@@ -1,5 +1,0 @@
-// Window Height 100vh including mobile browser toolbar
-$max-vh: calc(var(--vh, 1vh) * 100);
-
-// Maximum Width including scrollbar
-$max-w: calc(100vw - var(--scroll-width));
