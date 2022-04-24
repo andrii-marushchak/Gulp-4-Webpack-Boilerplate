@@ -1,40 +1,20 @@
 ### Run Server
 
-Set **ProxyServer** to true if you need proxy server \
-Set **webpackModules** if you want to use ES6 imports
+Set **ProxyServer** to true if you need proxy server, and populate **domain** const
+
 ```js
-const ProxyServer = false;
-const webpackModules = true;
+const proxyServer = false 
+const domain = 'localhost/test'
 ```
+
+### Run Server & Watcher
 
 ```bash
-npm i
-gulp
+npm run dev | gulp
 ```
 
-
-### Run Watcher
+### Build Project
 
 ```bash
-gulp
+npm run build | gulp build
 ```
-
-### Compile .SCSS
-
-```bash
-gulp scss
-```
-
-### Compile .JS
-
-```bash
-gulp js
-```
-
-### Compress images
-
-```bash
-gulp img
-```
-
-

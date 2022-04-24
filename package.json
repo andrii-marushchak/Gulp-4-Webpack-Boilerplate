@@ -19,7 +19,9 @@
   "type": "module",
   "scripts": {
     "dev": "gulp dev",
-    "build": "gulp build"
+    "build": "gulp build",
+    "zip": "gulp zip",
+    "deploy": "gulp deploy"
   },
   "repository": {
     "type": "git",
