@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // Anchor Links
     import('./components/anchor-scroll.js')
 
+    console.log('+');
+
 })
 
 
