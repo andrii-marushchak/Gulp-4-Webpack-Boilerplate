@@ -466,7 +466,6 @@ const img = () => {
         .pipe(gulp.dest(paths.img.dest))
 
         // WebP Convertation
-        .pipe(newer(paths.img.dest))  // Loop only new images
         .pipe(webp())
         .pipe(gulp.dest(paths.img.src_dest))
         .pipe(gulp.dest(paths.img.dest))
