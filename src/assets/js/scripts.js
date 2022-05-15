@@ -1,9 +1,6 @@
 import $ from 'jquery'
 
-window.jQuery = $
-window.$ = $
-
-document.addEventListener("DOMContentLoaded", function (event) {
+jQuery(document).ready(function ($) {
     "use strict"
 
     // CSS variable of Scrollbar width
@@ -12,13 +9,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // Anchor Links
     import('./components/anchor-scroll.js')
 
-    console.log('+');
+
+
 
 })
 
 
-jQuery(document).ready(function ($) {
+
+
+/*
+
+document.addEventListener("DOMContentLoaded", function (event) {
     "use strict"
 
 
 })
+
+*/
