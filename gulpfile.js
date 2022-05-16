@@ -96,7 +96,7 @@ const paths = {
         dest: `${buildFolder}/assets/js/`
     },
     img: {
-        src: `${srcFolder}/assets/img/**/**/*`,
+        srcForOptimization: `${srcFolder}/assets/img/**/**/*.{jpg,png,jpeg}`,
         srcForConversion: `${srcFolder}/assets/img/**/**/*.{jpg,png,jpeg}`,
         src_dest: `${srcFolder}/assets/img/`,
         dest: `${buildFolder}/assets/img/`,
@@ -444,7 +444,7 @@ const files = (end) => {
 }
 
 const imgOptimization = () => {
-    return gulp.src(paths.img.src)
+    return gulp.src(paths.img.srcForOptimization)
         .pipe(plumber({
             errorHandler: function (err) {
                 notify.onError({
@@ -457,7 +457,6 @@ const imgOptimization = () => {
         // Images Compression
         .pipe(newer(paths.img.dest))  // Loop only new images
 
-        /*
         .pipe(imagemin([
             // GIF
             gifsicle({interlaced: true}),
@@ -469,7 +468,7 @@ const imgOptimization = () => {
             svgo({}),
 
             // JPG
-            mozjpeg({quality: 75, progressive: true}),
+            mozjpeg({quality: 70, progressive: true}),
             imageminJpegoptim({
                 progressive: true,
                 stripAll: true,
@@ -480,10 +479,9 @@ const imgOptimization = () => {
                 stripExif: true,
             })
         ], {
-            optimizationLevel: 4,
+            optimizationLevel: 5,
             progressive: true,
         }))
-         */
 
         /*
         .pipe(tinypng({
@@ -540,7 +538,6 @@ const imgAvifConversion = () => {
         .pipe(gulp.dest(paths.img.dest))
 }
 
-
 const watch = () => {
     // SCSS
     gulp.watch(paths.scss.src, gulp.series(scss))
@@ -552,7 +549,7 @@ const watch = () => {
     gulp.watch(paths.html.watch_srs, gulp.series(html))
 
     // Images
-    gulp.watch(paths.img.src, gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion))
+    gulp.watch(paths.img.srcForOptimization, gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion))
 
     // Vendors folder
     gulp.watch(paths.vendors.src, gulp.series(reload))
