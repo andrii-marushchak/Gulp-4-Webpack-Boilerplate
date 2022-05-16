@@ -3,7 +3,7 @@ import del from "del"
 import through from "through2"
 import vinylFTP from 'vinyl-ftp';
 import fs from 'fs';
-
+import path from 'path';
 
 // Gulp
 import gulp from "gulp"
@@ -22,6 +22,7 @@ import htmlhint from 'gulp-htmlhint'
 import fileinclude from 'gulp-file-include'
 import gulpEjsMonster from 'gulp-ejs-monster'
 import versionNumber from "gulp-version-number";
+import imgToPicture from "gulp-html-img-to-picture"
 
 // SASS
 import dartSass from 'sass'
@@ -35,7 +36,6 @@ import sortMediaQueries from 'postcss-sort-media-queries'
 
 // Images
 import newer from "gulp-newer"
-import changed from 'gulp-changed'
 
 import imagemin, {gifsicle, mozjpeg, optipng, svgo} from 'gulp-imagemin'
 import imageminJpegoptim from 'imagemin-jpegoptim'
@@ -316,124 +316,6 @@ const js = () => {
 }
 
 const html = () => {
-    function htmlImgToPicture() {
-        // gulp-avif-webp
-        const PluginError = gulpUtil.PluginError
-
-        const extensions = ['.jpg', '.jpeg', '.png']
-        return through.obj(function (file, enc, cb) {
-            if (file.isNull()) {
-                cb(null, file)
-                return
-            }
-            if (file.isStream()) {
-                cb(new PluginError('htmlImgToPicture', 'Streaming not supported'))
-                return
-            }
-
-            try {
-                let inPicture = false
-
-                const data = file.contents
-                    .toString()
-                    .split('\n')
-                    .map(function (line) {
-
-                        if (line.indexOf('<picture') + 1) inPicture = true
-                        if (line.indexOf('</picture') + 1) inPicture = false
-
-                        if (line.indexOf('<img') + 1 && !inPicture) {
-                            let Re = /<img([^>]+)src=[\"\'](\S+)[\"\']([^>\/]+)\/?>/gi
-                            let regexpArray = Re.exec(line)
-                            let imgTag = regexpArray[0] // orig image tag
-                            let srcImage = regexpArray[2] // src URL
-                            let newAvifUrl = srcImage // for new URL avif
-                            let newWebpUrl = srcImage // for new URL webp
-
-                            if (srcImage.indexOf('.webp') + 1) return line
-
-                            extensions.forEach(ext => {
-
-                                if (srcImage.indexOf(ext) == -1) {
-                                    return line;
-
-                                } else {
-                                    newAvifUrl = newAvifUrl.replace(ext, '.avif')
-                                    newWebpUrl = newWebpUrl.replace(ext, '.webp')
-
-                                    function getFileSize(srx) {
-                                        try {
-                                            return fs.statSync(`${buildFolder}/` + srx).size
-                                        } catch (err) {
-                                            return 0;
-                                        }
-                                    }
-
-                                    let images = [
-                                        {
-                                            name: 'original',
-                                            html: imgTag,
-                                            size: getFileSize(srcImage)
-                                        },
-                                        {
-                                            name: 'avif',
-                                            html: `<source srcset="${newAvifUrl}" type="image/avif">`,
-                                            size: getFileSize(newAvifUrl)
-                                        },
-                                        {
-                                            name: 'webp',
-                                            html: `<source srcset="${newWebpUrl}" type="image/webp">`,
-                                            size: getFileSize(newWebpUrl)
-                                        }
-                                    ]
-
-                                    // Filter Images
-                                    images = images.filter(function (img) {
-                                        if (img.name !== 'original' && img.size === 0) {
-                                            // Remove unexisted img
-                                        } else {
-                                            return img;
-                                        }
-                                    })
-
-                                    // Sort Images
-                                    images.sort((a, b) => a.size > b.size ? 1 : -1);
-
-                                    if (extensions.includes(ext)) {
-                                        // If image has right extension
-
-                                        line = '<picture>';
-                                        images.forEach((img) => {
-                                            line += img.html;
-                                        })
-                                        line += '</picture>';
-
-                                    } else {
-                                        // if SVG
-                                        line = imgTag
-                                    }
-
-                                }
-                            });
-
-                            return line
-                        }
-                        return line
-                    })
-                    .join('\n')
-
-                file.contents = new Buffer.from(data)
-
-                this.push(file)
-            } catch (err) {
-                console.log(err);
-                this.emit('end'); // Recover from errors
-            }
-
-            cb()
-        })
-    }
-
     return gulp.src(paths.html.src)
         .pipe(plumber({
             errorHandler: function (err) {
@@ -451,7 +333,11 @@ const html = () => {
         // .pipe(gulpEjsMonster({compileDebug: true}).on('error', gulpEjsMonster.preventCrash))
 
         // Convert IMG to <picture>
-        .pipe(htmlImgToPicture())
+        .pipe(imgToPicture(
+            {
+                imgFolder: `${buildFolder}/`
+            }
+        ))
 
         // Add version to scripts & styles
         .pipe(gulpif(isProduction(),
