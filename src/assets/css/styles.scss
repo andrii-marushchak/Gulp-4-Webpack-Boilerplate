@@ -21,5 +21,13 @@
 // Utility CSS
 @import "other/utility";
 
+// Components
+@import "components/buttons";
+@import "components/navigation";
+@import "components/footer";
+
+// Pages
+@import "pages/page-home";
+
 // Core Styles -- must be latest
 @import "core";
