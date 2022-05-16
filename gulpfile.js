@@ -97,8 +97,7 @@ const paths = {
     },
     img: {
         src: `${srcFolder}/assets/img/**/**/*`,
-        srcForWebpConversion: `${srcFolder}/assets/img/**/**/*.{jpg,png,jpeg}`,
-        srcForAvifConversion: `${srcFolder}/assets/img/**/**/*.{jpg,png,jpeg}`,
+        srcForConversion: `${srcFolder}/assets/img/**/**/*.{jpg,png,jpeg}`,
         src_dest: `${srcFolder}/assets/img/`,
         dest: `${buildFolder}/assets/img/`,
     },
@@ -444,8 +443,8 @@ const files = (end) => {
     end()
 }
 
-const img = (end) => {
-    gulp.src(paths.img.src)
+const imgOptimization = () => {
+    return gulp.src(paths.img.src)
         .pipe(plumber({
             errorHandler: function (err) {
                 notify.onError({
@@ -457,6 +456,8 @@ const img = (end) => {
 
         // Images Compression
         .pipe(newer(paths.img.dest))  // Loop only new images
+
+        /*
         .pipe(imagemin([
             // GIF
             gifsicle({interlaced: true}),
@@ -482,6 +483,7 @@ const img = (end) => {
             optimizationLevel: 4,
             progressive: true,
         }))
+         */
 
         /*
         .pipe(tinypng({
@@ -492,22 +494,50 @@ const img = (end) => {
 
         .pipe(gulp.dest(paths.img.src_dest))
         .pipe(gulp.dest(paths.img.dest))
+}
 
-    // WebP
-    gulp.src(paths.img.srcForWebpConversion)
-        .pipe(gulpif(isDevelopment(), newer(paths.img.dest)))  // Loop only new images
-        .pipe(webp())
+const imgWebPConversion = () => {
+// WebP
+    return gulp.src(paths.img.srcForConversion)
+        .pipe(plumber({
+            errorHandler: function (err) {
+                notify.onError({
+                    title: "WebP Conversion Error",
+                    message: "<%= error.message %>"
+                })(err)
+            }
+        }))
+        .pipe(gulpif(isDevelopment(), newer(paths.img.srcForConversion)))
+        .pipe(webp({
+                quality: 70,
+                alphaQuality: 85,
+                metadata: 'none',
+            }
+        ))
         .pipe(gulp.dest(paths.img.src_dest))
         .pipe(gulp.dest(paths.img.dest))
+}
 
-    // Avid
-    gulp.src(paths.img.srcForAvifConversion)
-        .pipe(gulpif(isDevelopment(), newer(paths.img.dest)))  // Loop only new imagesgulp
-        .pipe(avif())
+const imgAvifConversion = () => {
+// Avif
+    return gulp.src(paths.img.srcForConversion)
+        .pipe(plumber({
+            errorHandler: function (err) {
+                notify.onError({
+                    title: "Avif Conversion Error",
+                    message: "<%= error.message %>"
+                })(err)
+            }
+        }))
+        .pipe(gulpif(isDevelopment(), newer(paths.img.srcForConversion)))
+
+        .pipe(avif({
+            quality: 70,
+            speed: 8,
+        }))
+
         .pipe(gulp.dest(paths.img.src_dest))
         .pipe(gulp.dest(paths.img.dest))
-
-    end()
 }
 
 
@@ -522,7 +552,7 @@ const watch = () => {
     gulp.watch(paths.html.watch_srs, gulp.series(html))
 
     // Images
-    gulp.watch(paths.img.src, gulp.series(img))
+    gulp.watch(paths.img.src, gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion))
 
     // Vendors folder
     gulp.watch(paths.vendors.src, gulp.series(reload))
@@ -534,10 +564,10 @@ const watch = () => {
     gulp.watch(paths.fonts.src, gulp.series(reload))
 }
 
-export {serve, reload, watch, clean, scss, js, html, img, files, generateZip, ftp}
+export {serve, reload, watch, clean, scss, js, html, imgOptimization, imgWebPConversion, imgAvifConversion, files, generateZip, ftp}
 
-const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss, js, img), html, gulp.parallel(watch, serve))
-const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss, js, img), html)
+const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss, js, gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion)), html, gulp.parallel(watch, serve))
+const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss, js, gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion)), html)
 const zip = gulp.series(build, generateZip)
 const deploy = gulp.series(build, ftp)
 
