@@ -561,10 +561,11 @@ const watch = () => {
     gulp.watch(paths.fonts.src, gulp.series(reload))
 }
 
-export {serve, reload, watch, clean, scss, js, html, imgOptimization, imgWebPConversion, imgAvifConversion, files, generateZip, ftp}
+export {serve, reload, watch, clean, scss, js, html, imgOptimization, imgWebPConversion, imgAvifConversion, img, files, generateZip, ftp}
 
-const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss, js, gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion)), html, gulp.parallel(watch, serve))
-const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss, js, gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion)), html)
+const img = gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion);
+const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss, js, img), html, gulp.parallel(watch, serve))
+const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss, js, img), html)
 const zip = gulp.series(build, generateZip)
 const deploy = gulp.series(build, ftp)
 

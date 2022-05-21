@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-css">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,6 +12,9 @@
 
     <!-- Core CSS Template -->
     <link rel="stylesheet" href="assets/css/styles.min.css">
+
+    <!-- Fix WSOD Flickering -->
+    <script async>document.documentElement.className = document.documentElement.className.replace(/\bno-css\b/, 'css')</script>
 </head>
 <body>
 
