@@ -16,3 +16,8 @@ const setScrollbarWidthCSSVariable = () => {
 });
 
 setScrollbarWidthCSSVariable()
+
+
+
+
+console.log('scrollbar width');

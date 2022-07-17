@@ -9,6 +9,7 @@ jQuery(document).ready(function ($) {
     // Anchor Links
     import('./components/anchor-scroll.js')
 
+    console.log('+');
 
 
 

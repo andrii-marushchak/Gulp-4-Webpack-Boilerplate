@@ -47,6 +47,8 @@ import avif from 'gulp-avif'
 // JS & Webpack
 import webpack from "webpack"
 import webpackStream from "webpack-stream"
+import WebpackObfuscator from 'webpack-obfuscator'
+
 
 // Enviroment
 import {setDevelopmentEnvironment, setProductionEnvironment, isProduction, isDevelopment} from 'gulp-node-env'
@@ -286,7 +288,12 @@ const js = () => {
                     new webpack.AutomaticPrefetchPlugin(),
                     new webpack.optimize.LimitChunkCountPlugin({
                         maxChunks: 1
-                    })
+                    }),
+                    /* Obfuscator
+                    new WebpackObfuscator({
+                        rotateStringArray: true
+                    }, ['excluded_bundle_name.js'])
+                    */
                 ],
                 experiments: {
                     topLevelAwait: true,

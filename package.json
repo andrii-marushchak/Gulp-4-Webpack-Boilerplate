@@ -35,8 +35,9 @@
   "homepage": "https://github.com/andrii-marushchak/Gulp-4-Webpack-Boilerplate#readme",
   "dependencies": {
     "get-scrollbar-width": "^1.0.5",
+    "install": "^0.13.0",
     "jquery": "^3.6.0",
-    "npm": "^8.7.0"
+    "npm": "^8.14.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.4",
@@ -69,11 +70,13 @@
     "gulp-webp-html-nosvg": "^1.0.9",
     "gulp-zip": "^5.1.0",
     "imagemin-jpegoptim": "^8.0.0",
+    "javascript-obfuscator": "^4.0.0",
     "postcss-sort-media-queries": "^4.2.1",
     "sass": "^1.50.1",
     "through2": "^4.0.2",
     "vinyl-ftp": "^0.6.1",
     "webpack": "^5.72.0",
+    "webpack-obfuscator": "^3.5.1",
     "webpack-stream": "^7.0.0"
   }
 }
