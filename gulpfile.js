@@ -211,8 +211,6 @@ const scss = () => {
                 sort: 'desktop-first' // default
             })
         ])))
-
-        .pipe(rename("styles.min.css"))
         .pipe(gulpif(isDevelopment, sourcemaps.write('./')))
         .pipe(gulp.dest(paths.scss.dest))
         .pipe(size())
