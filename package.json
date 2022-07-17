@@ -36,7 +36,7 @@
   "dependencies": {
     "get-scrollbar-width": "^1.0.5",
     "jquery": "^3.6.0",
-    "npm": "^8.7.0"
+    "npm": "^8.11.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.4",
