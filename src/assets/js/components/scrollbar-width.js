@@ -9,7 +9,13 @@ const setScrollbarWidthCSSVariable = () => {
 }
 
 // Update Browser Windows Sizes
-['resize', 'orientationchange', 'popstate', 'hashchange', 'load'].forEach(event => {
+[
+    'resize',
+    'orientationchange',
+    'popstate',
+    'hashchange',
+    'load'
+].forEach(event => {
     window.addEventListener(event, () => {
         setScrollbarWidthCSSVariable()
     });
@@ -20,4 +26,4 @@ setScrollbarWidthCSSVariable()
 
 
 
-console.log('scrollbar width');
+

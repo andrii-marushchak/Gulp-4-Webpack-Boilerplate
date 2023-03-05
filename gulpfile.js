@@ -1,65 +1,57 @@
 // Node
-import del from "del"
-import through from "through2"
-import vinylFTP from 'vinyl-ftp';
-import fs from 'fs';
-import path from 'path';
+const through = require("through2");
+const fs = require('fs');
+const path = require('path');
 
 // Gulp
-import gulp from "gulp"
-import plumber from "gulp-plumber"
-import sourcemaps from "gulp-sourcemaps"
-import gulpif from "gulp-if"
-import rename from "gulp-rename"
-import notify from "gulp-notify"
-import size from 'gulp-filesize'
-import zipPlugin from "gulp-zip";
-import gulpUtil from 'gulp-util';
+const gulp = require("gulp");
+const plumber = require("gulp-plumber");
+const sourcemaps = require("gulp-sourcemaps")
+const gulpif = require("gulp-if")
+const rename = require("gulp-rename")
+const notify = require("gulp-notify")
+const size = require('gulp-filesize')
+const gulpUtil = require('gulp-util')
+const clean = require('gulp-clean');
 
 // HTML
-import htmlmin from 'gulp-htmlmin'
-import htmlhint from 'gulp-htmlhint'
-import fileinclude from 'gulp-file-include'
-import gulpEjsMonster from 'gulp-ejs-monster'
-import versionNumber from "gulp-version-number";
-import imgToPicture from "gulp-html-img-to-picture"
+const htmlmin = require('gulp-htmlmin')
+const htmlhint = require('gulp-htmlhint')
+const fileinclude = require('gulp-file-include')
+const versionNumber = require("gulp-version-number")
+const imgToPicture = require("gulp-html-img-to-picture")
 
-// SASS
-import dartSass from 'sass'
-import gulpSass from 'gulp-sass'
+// Sass
+const sass = require('gulp-sass')(require('sass'));
 
 // PostCSS
-import postcss from 'gulp-postcss'
-import autoprefixer from 'autoprefixer'
-import cssnano from 'cssnano'
-import sortMediaQueries from 'postcss-sort-media-queries'
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const sortMediaQueries = require('postcss-sort-media-queries');
 
 // Images
-import newer from "gulp-newer"
-
-import imagemin, {gifsicle, mozjpeg, optipng, svgo} from 'gulp-imagemin'
-import imageminJpegoptim from 'imagemin-jpegoptim'
-import tinypng from 'gulp-tinypng-compress'
-
-import webp from 'gulp-webp'
-import avif from 'gulp-avif'
+const newer = require("gulp-newer");
+const webp = require('gulp-webp');
+const avif = require('gulp-avif');
 
 // JS & Webpack
-import webpack from "webpack"
-import webpackStream from "webpack-stream"
-import WebpackObfuscator from 'webpack-obfuscator'
-
-
-// Enviroment
-import {setDevelopmentEnvironment, setProductionEnvironment, isProduction, isDevelopment} from 'gulp-node-env'
-
-setDevelopmentEnvironment()
-
+const webpack = require("webpack") // "babel-loader"
+const webpackStream = require("webpack-stream")
 
 // BrowserSync
-import bs from "browser-sync"
+const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
 
-const browserSync = bs.create()
+// Enviroment
+const {
+          setDevelopmentEnvironment,
+          setProductionEnvironment,
+          isProduction,
+          isDevelopment
+      } = require('gulp-node-env')
+
+// Set Development enironment by default
+setDevelopmentEnvironment();
 
 const srcFolder = './src'
 const buildFolder = './dist'
@@ -69,7 +61,6 @@ const paths = {
         src: [
             `${srcFolder}/*.html`,
             `${srcFolder}/**/*.php`,
-            `${srcFolder}/**/*.ejs`
         ],
         watch_srs: [
             `${srcFolder}/**/*.html`,
@@ -85,6 +76,7 @@ const paths = {
             `${srcFolder}/assets/css/other/*.scss`,
             `${srcFolder}/assets/css/pages/*.scss`,
             `${srcFolder}/assets/css/sections/*.scss`,
+            `${srcFolder}/assets/css/blocks/*.scss`,
             `${srcFolder}/assets/css/vendors/*.scss`,
         ],
         dest: `${buildFolder}/assets/css/`
@@ -93,6 +85,8 @@ const paths = {
         src: [
             `${srcFolder}/assets/js/scripts.js`,
             `${srcFolder}/assets/js/components/*.js`,
+            `${srcFolder}/assets/js/pages/*.js`,
+            `${srcFolder}/assets/js/forms/*.js`,
             `${srcFolder}/assets/js/functions/*.js`,
         ],
         dest: `${buildFolder}/assets/js/`
@@ -121,7 +115,7 @@ const paths = {
     }
 }
 
-const serve = () => {
+function serve() {
     const proxyServer = false
     const domain = 'localhost/test'
     if (proxyServer) {
@@ -141,17 +135,26 @@ const serve = () => {
     }
 }
 
-const reload = () => {
+function reload() {
     browserSync.reload()
 }
 
-const clean = () => {
-    return del(buildFolder)
+function cleanDist() {
+    return gulp.src(paths.img.srcForConversion)
+        .pipe(plumber({
+            errorHandler: function (err) {
+                notify.onError({
+                    title: "Clear Dist Folder Error",
+                    message: "<%= error.message %>"
+                })(err)
+            }
+        }))
+
+    return gulp.src(buildFolder)
+        .pipe(clean({force: true}))
 }
 
-const scss = () => {
-    const sass = gulpSass(dartSass)
-
+function scss() {
     return gulp.src(paths.scss.src)
         .pipe(plumber({
             errorHandler: function (err) {
@@ -173,7 +176,9 @@ const scss = () => {
 
         // Build PostCSS
         .pipe(gulpif(isProduction, postcss([
-            autoprefixer(),
+            autoprefixer({
+                grid: false
+            }),
             cssnano({
                 autoprefixer: true,
                 cssDeclarationSorter: true,
@@ -219,7 +224,7 @@ const scss = () => {
         .pipe(browserSync.stream())
 }
 
-const js = () => {
+function js() {
     return gulp.src(paths.js.src)
         .pipe(plumber({
             errorHandler: function (err) {
@@ -231,79 +236,65 @@ const js = () => {
         }))
 
         // Webpack Development
-        .pipe(gulpif(isDevelopment,
-            webpackStream({
-                devtool: "eval-source-map",
-                mode: 'development',
-                module: {
-                    rules: [
-                        {
-                            test: /\.(js)$/,
-                            exclude: /(node_modules)/,
-                            use: ['babel-loader']
-                        },
-                    ],
-                },
-                plugins: [
-                    new webpack.ProvidePlugin({
-                        $: 'jquery',
-                        jQuery: 'jquery',
-                    }),
-                    new webpack.AutomaticPrefetchPlugin(),
-                    new webpack.optimize.LimitChunkCountPlugin({
-                        maxChunks: 1
-                    })
+        .pipe(gulpif(isDevelopment, webpackStream({
+            devtool: "eval-source-map",
+            mode: 'development',
+            module: {
+                rules: [
+                    {
+                        test: /\.(js)$/,
+                        exclude: /(node_modules)/,
+                        use: ['babel-loader']
+                    },
                 ],
-                experiments: {
-                    topLevelAwait: true,
-                },
-                output: {
-                    filename: '[name].js',
-                    sourceMapFilename: "[name].js.map"
-                },
-            })
-        )).on('error', function handleError() {
+            },
+            plugins: [
+                new webpack.ProvidePlugin({
+                    $: 'jquery',
+                    jQuery: 'jquery',
+                }),
+                new MiniCssExtractPlugin(),
+                new webpack.AutomaticPrefetchPlugin(),
+            ],
+            experiments: {
+                topLevelAwait: true,
+            },
+            output: {
+                filename: '[name].js',
+                sourceMapFilename: "[name].js.map"
+            },
+        }))).on('error', function handleError() {
             this.emit('end'); // Recover from errors
         })
 
         // Webpack Production
-        .pipe(gulpif(isProduction(),
-            webpackStream({
-                devtool: false,
-                mode: 'production',
-                module: {
-                    rules: [
-                        {
-                            test: /\.(js)$/,
-                            exclude: /(node_modules)/,
-                            use: ['babel-loader']
-                        },
-                    ],
-                },
-                plugins: [
-                    new webpack.ProvidePlugin({
-                        $: 'jquery',
-                        jQuery: 'jquery',
-                    }),
-                    new webpack.AutomaticPrefetchPlugin(),
-                    new webpack.optimize.LimitChunkCountPlugin({
-                        maxChunks: 1
-                    }),
-                    /* Obfuscator
-                    new WebpackObfuscator({
-                        rotateStringArray: true
-                    }, ['excluded_bundle_name.js'])
-                    */
+        .pipe(gulpif(isProduction(), webpackStream({
+            devtool: false,
+            mode: 'production',
+            module: {
+                rules: [
+                    {
+                        test: /\.(js)$/,
+                        exclude: /(node_modules)/,
+                        use: ['babel-loader']
+                    },
                 ],
-                experiments: {
-                    topLevelAwait: true,
-                },
-                output: {
-                    filename: '[name].js',
-                    sourceMapFilename: "[name].js.map"
-                },
-            })
-        )).on('error', function handleError() {
+            },
+            plugins: [
+                new webpack.ProvidePlugin({
+                    $: 'jquery',
+                    jQuery: 'jquery',
+                }),
+                new webpack.AutomaticPrefetchPlugin(),
+            ],
+            experiments: {
+                topLevelAwait: true,
+            },
+            output: {
+                filename: '[name].js',
+                sourceMapFilename: "[name].js.map"
+            },
+        }))).on('error', function handleError() {
             this.emit('end'); // Recover from errors
         })
 
@@ -319,7 +310,7 @@ const js = () => {
         .pipe(browserSync.stream())
 }
 
-const html = () => {
+function html() {
     return gulp.src(paths.html.src)
         .pipe(plumber({
             errorHandler: function (err) {
@@ -333,35 +324,27 @@ const html = () => {
         // Combine HTML Parts
         .pipe(fileinclude())
 
-        // Compile EJS
-        // .pipe(gulpEjsMonster({compileDebug: true}).on('error', gulpEjsMonster.preventCrash))
-
         // Convert IMG to <picture>
-        .pipe(imgToPicture(
-            {
-                imgFolder: `${buildFolder}/`
-            }
-        ))
+        .pipe(imgToPicture({
+            imgFolder: `${buildFolder}/`
+        }))
 
         // Add version to scripts & styles
-        .pipe(gulpif(isProduction(),
-            versionNumber({
-                'value': '%DT%',
-                'append': {
-                    'key': '_v',
-                    'cover': 0,
-                    'to': [
-                        'css',
-                        'js',
-                    ]
-                },
-                /*
+        .pipe(gulpif(isProduction(), versionNumber({
+            'value': '%DT%',
+            'append': {
+                'key': '_v',
+                'cover': 0,
+                'to': [
+                    'css',
+                    'js',
+                ]
+            }, /*
                 'output': {
                    'file': 'gulp/version.json'
                 }
                */
-            })
-        ))
+        })))
 
         // Validate HTML
         .pipe(gulpif(isDevelopment(), htmlhint({
@@ -370,10 +353,8 @@ const html = () => {
             "tags-check": false,
             "tag-self-close": false,
             "tagname-lowercas": true,
-            "tagname-specialchars": true,
-            // ID
-            'id-unique': true,
-            // Attributes
+            "tagname-specialchars": true, // ID
+            'id-unique': true, // Attributes
             'alt-require': true
         })))
         .pipe(gulpif(isDevelopment(), htmlhint.failOnError()))
@@ -390,47 +371,7 @@ const html = () => {
         .pipe(browserSync.stream())
 }
 
-const generateZip = () => {
-    del(`./app.zip`);
-    return gulp.src(`${buildFolder}/**/*.*`, {})
-        .pipe(plumber({
-            errorHandler: function (err) {
-                notify.onError({
-                    title: "Zip Error",
-                    message: "<%= error.message %>"
-                })(err)
-            }
-        }))
-        .pipe(zipPlugin(`app.zip`))
-        .pipe(gulp.dest('./'))
-}
-
-const ftp = () => {
-    const ftpConnect = vinylFTP.create({
-        host: "",
-        user: "",
-        password: "",
-        port: '21',
-        parallel: 16,
-        maxConnections: 16,
-        log: gulpUtil.log
-    })
-
-    return gulp.src(`${buildFolder}/**/*.*`)
-        .pipe(plumber({
-            errorHandler: function (err) {
-                notify.onError({
-                    title: "FTP Error",
-                    message: "<%= error.message %>"
-                })(err)
-            }
-        }))
-        .pipe(ftpConnect.dest(
-            './app'
-        ))
-}
-
-const files = (end) => {
+function files(callback) {
     // Fonts
     gulp.src(paths.fonts.src)
         .pipe(gulp.dest(paths.fonts.dest))
@@ -445,10 +386,10 @@ const files = (end) => {
 
         .pipe(browserSync.stream())
 
-    end()
+    callback()
 }
 
-const imgOptimization = () => {
+function imgOptimization() {
     return gulp.src(paths.img.srcForOptimization)
         .pipe(plumber({
             errorHandler: function (err) {
@@ -462,32 +403,6 @@ const imgOptimization = () => {
         // Images Compression
         .pipe(newer(paths.img.dest))  // Loop only new images
 
-        .pipe(imagemin([
-            // GIF
-            gifsicle({interlaced: true}),
-
-            // PNG
-            optipng({optimizationLevel: 5}),
-
-            // SVG
-            svgo({}),
-
-            // JPG
-            mozjpeg({quality: 70, progressive: true}),
-            imageminJpegoptim({
-                progressive: true,
-                stripAll: true,
-                stripXmp: true,
-                stripIptc: true,
-                stripCom: true,
-                stripIcc: true,
-                stripExif: true,
-            })
-        ], {
-            optimizationLevel: 5,
-            progressive: true,
-        }))
-
         /*
         .pipe(tinypng({
             key: '', // https://tinify.cn/dashboard/api
@@ -499,8 +414,8 @@ const imgOptimization = () => {
         .pipe(gulp.dest(paths.img.dest))
 }
 
-const imgWebPConversion = () => {
-// WebP
+function imgWebPConversion() {
+    // WebP
     return gulp.src(paths.img.srcForConversion)
         .pipe(plumber({
             errorHandler: function (err) {
@@ -521,8 +436,8 @@ const imgWebPConversion = () => {
         .pipe(gulp.dest(paths.img.dest))
 }
 
-const imgAvifConversion = () => {
-// Avif
+function imgAvifConversion() {
+    // Avif
     return gulp.src(paths.img.srcForConversion)
         .pipe(plumber({
             errorHandler: function (err) {
@@ -543,7 +458,7 @@ const imgAvifConversion = () => {
         .pipe(gulp.dest(paths.img.dest))
 }
 
-const watch = () => {
+function watch() {
     // SCSS
     gulp.watch(paths.scss.src, gulp.series(scss))
 
@@ -566,13 +481,12 @@ const watch = () => {
     gulp.watch(paths.fonts.src, gulp.series(reload))
 }
 
-export {serve, reload, watch, clean, scss, js, html, imgOptimization, imgWebPConversion, imgAvifConversion, img, files, generateZip, ftp}
 
 const img = gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion);
-const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss, js, img), html, gulp.parallel(watch, serve))
-const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss, js, img), html)
-const zip = gulp.series(build, generateZip)
-const deploy = gulp.series(build, ftp)
+const dev = gulp.series(setDevelopmentEnvironment, cleanDist, gulp.parallel(files, scss, js, img), html, gulp.parallel(watch, serve))
+const build = gulp.series(setProductionEnvironment, cleanDist, gulp.parallel(files, scss, js, img), html)
 
-export {dev, build, zip, deploy}
-export {dev as default}
+exports.build = build
+
+exports.dev = dev
+exports.default = dev
