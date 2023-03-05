@@ -1,5 +1,3 @@
-@charset "UTF-8";
-
 // SCSS/CSS Variables
 @import "vars";
 
@@ -18,16 +16,18 @@
 // Typography
 @import "other/typography";
 
-// Utility CSS
-@import "other/utility";
-
-// Components
+// Critical CSS
 @import "components/buttons";
 @import "components/navigation";
-@import "components/footer";
+
+// Core
+@import "core";
+
+// Utility CSS
+@import "other/utility";
 
 // Pages
 @import "pages/page-home";
 
-// Core Styles -- must be latest
-@import "core";
+// Non Critical CSS
+@import "components/footer";

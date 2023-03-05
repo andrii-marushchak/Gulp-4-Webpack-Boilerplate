@@ -253,7 +253,6 @@ function js() {
                     $: 'jquery',
                     jQuery: 'jquery',
                 }),
-                new MiniCssExtractPlugin(),
                 new webpack.AutomaticPrefetchPlugin(),
             ],
             experiments: {
@@ -480,7 +479,6 @@ function watch() {
     // Fonts
     gulp.watch(paths.fonts.src, gulp.series(reload))
 }
-
 
 const img = gulp.series(imgOptimization, imgWebPConversion, imgAvifConversion);
 const dev = gulp.series(setDevelopmentEnvironment, cleanDist, gulp.parallel(files, scss, js, img), html, gulp.parallel(watch, serve))
