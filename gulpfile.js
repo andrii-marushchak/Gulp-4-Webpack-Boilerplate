@@ -94,7 +94,7 @@ const paths = {
     img: {
         srcForOptimization: `${srcFolder}/assets/img/**/**/*.{jpg,png,jpeg}`,
         srcForConversion: `${srcFolder}/assets/img/**/**/*.{jpg,png,jpeg}`,
-        src_dest: `${srcFolder}/assets/img/`,
+        src_dest: `${srcFolder}/assets/img/*`,
         dest: `${buildFolder}/assets/img/`,
     },
     video: {
@@ -382,6 +382,10 @@ function files(callback) {
     // Videos
     gulp.src(paths.video.src)
         .pipe(gulp.dest(paths.video.dest))
+
+    // Image
+    gulp.src(paths.img.src_dest)
+        .pipe(gulp.dest(paths.img.dest))
 
         .pipe(browserSync.stream())
 
