@@ -25,7 +25,7 @@ import versionNumber from "gulp-version-number";
 import imgToPicture from "gulp-html-img-to-picture"
 
 // SASS
-import dartSass from 'sass'
+import * as dartSass from 'sass'
 import gulpSass from 'gulp-sass'
 
 // PostCSS
