@@ -58,8 +58,9 @@ const buildFolder = './dist'
 
 const paths = {
     html: {
-        src: [
+         src: [
             `${srcFolder}/*.html`,
+            `${srcFolder}/template-parts/**/*.html`,
             `${srcFolder}/**/*.php`,
         ],
         watch_srs: [
