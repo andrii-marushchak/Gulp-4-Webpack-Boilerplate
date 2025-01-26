@@ -1,0 +1,10 @@
+body {
+	min-height: 100vh;
+	max-width: var(--max-width);
+	width: 100%;
+	background-color: var(--bg-color);
+}
+
+html {
+	accent-color: var(--color-primary);
+}

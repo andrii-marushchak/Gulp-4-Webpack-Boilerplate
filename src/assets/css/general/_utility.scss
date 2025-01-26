@@ -1,0 +1,34 @@
+@use "../include" as *;
+
+.uppercase, .text-uppercase {
+	text-transform: uppercase;
+}
+
+.text-truncate {
+	@include text-truncate;
+}
+
+
+.aligncenter, .center, .text-center {
+	text-align: center;
+}
+
+.alignleft, .left, .text-left {
+	text-align: left;
+}
+
+.alignright, .right, .text-right {
+	text-align: right;
+}
+
+
+.img-cover {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}

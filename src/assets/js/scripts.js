@@ -1,6 +1,11 @@
-// Anchor Links
-import './components/anchor-scroll.js'
+'use strict';
+document.addEventListener('DOMContentLoaded', function () {
 
+	// Anchor Scroll
+	import('./components/anchor-scroll.js')
 
-import 'magnific-popup'
+	// Checking browser scroll bar width
+	import('./components/scrollbar-width.js')
+
+});
 

@@ -1,0 +1,47 @@
+@use "../include" as *;
+
+body {
+	font-family: var(--font-primary);
+	font-size: clamp-property(18, 26);
+	line-height: 1.38;
+}
+
+.editor {
+
+	// 80%
+	&.text-sm {
+		font-size: clamp-property(calc(18 * 0.8), calc(26 * 0.8));
+	}
+
+	// 120%
+	&.text-lg {
+		font-size: clamp-property(calc(18 * 1.2), calc(26 * 1.2));
+	}
+
+
+	> *:last-child {
+		margin-bottom: 0;
+	}
+
+	@include headings {
+		margin-top: 20px;
+		margin-bottom: 0.75em;
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
+	a:not([class]) {
+		color: var(--color-link);
+		text-decoration: unset;
+		text-decoration-color: transparent;
+		@include hover {
+			color: var(--color-link-hover);
+			text-decoration-color: var(--color-link-hover);
+		}
+	}
+
+}
+
+
+

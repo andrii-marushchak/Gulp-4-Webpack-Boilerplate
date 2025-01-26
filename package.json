@@ -11,7 +11,9 @@
   "author": "",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp",
+    "dev": "gulp",
+    "build": "gulp build"
   },
   "devDependencies": {
     "@babel/core": "^7.26.7",
@@ -46,7 +48,6 @@
   "dependencies": {
     "get-scrollbar-width": "^1.0.5",
     "gulp-sourcemaps": "^3.0.0",
-    "magnific-popup": "^1.2.0",
     "swiper": "^11.2.1"
   }
 }

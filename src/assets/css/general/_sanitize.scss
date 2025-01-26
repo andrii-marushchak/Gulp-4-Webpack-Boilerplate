@@ -1,0 +1,237 @@
+*,
+::before,
+::after {
+	box-sizing: border-box; /* 1 */
+	background-repeat: no-repeat; /* 2 */
+	outline: 0;
+	margin: 0;
+	padding: 0;
+
+	&:active, &:focus, &:hover, &:visited {
+		outline: 0;
+		-webkit-tap-highlight-color: transparent
+	}
+}
+
+::before,
+::after {
+	text-decoration: inherit; /* 1 */
+	vertical-align: inherit; /* 2 */
+}
+
+:where(:root) {
+	cursor: default; /* 1 */
+	line-height: 1.5; /* 2 */
+	overflow-wrap: break-word; /* 3 */
+	-moz-tab-size: 4; /* 4 */
+	tab-size: 4; /* 4 */
+	-webkit-tap-highlight-color: transparent; /* 5 */
+	-webkit-text-size-adjust: 100%; /* 6 */
+	text-size-adjust: 100%; /* 6 */
+}
+
+
+:where(hr) {
+	color: inherit; /* 1 */
+	height: 0; /* 2 */
+}
+
+
+:where(nav) :where(ol, ul) {
+	list-style-type: none;
+	padding: 0;
+}
+
+:where(ol, ul) {
+	margin: 0;
+	padding: 0;
+
+	li {
+		ol, ul {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+:where(nav li)::before {
+	content: "\200B";
+	float: left;
+}
+
+:where(pre) {
+	font-family: monospace, monospace; /* 1 */
+	font-size: 1em; /* 2 */
+	overflow: auto; /* 3 */
+}
+
+:where(abbr[title]) {
+	text-decoration: underline;
+}
+
+:where(b, strong) {
+	font-weight: bold;
+}
+
+:where(code, kbd, samp) {
+	font-family: monospace, monospace; /* 1 */
+	font-size: 1em; /* 2 */
+}
+
+:where(small) {
+	font-size: 80%;
+}
+
+:where(big) {
+	font-size: 120%;
+}
+
+:where(audio, canvas, iframe, img, svg, video) {
+	vertical-align: middle;
+}
+
+:where(iframe) {
+	border-style: none;
+}
+
+:where(svg:not([fill])) {
+	fill: currentColor;
+}
+
+:where(table) {
+	border-collapse: collapse; /* 1 */
+	border-color: currentColor; /* 2 */
+	text-indent: 0; /* 3 */
+	margin: 0;
+}
+
+
+:where(button, select, input, textarea, label) {
+	margin: 0;
+	text-transform: unset;
+	border: none;
+	outline: none;
+	background: unset;
+	appearance: none;
+
+	&::-ms-expand {
+		display: none;
+	}
+}
+
+:where( input, textarea) {
+	padding: 0;
+	margin: 0;
+	appearance: none;
+	outline: none;
+	color: inherit;
+	border-radius: 0;
+	box-shadow: none;
+	border: none;
+
+	&::placeholder {
+		font-size: inherit;
+		color: inherit;
+	}
+
+	&:focus, &:hover, &:active, &.focus-visible, &.focus-within {
+		appearance: none;
+		outline: none;
+		color: inherit;
+		border-radius: 0;
+		box-shadow: none;
+		border: none;
+
+		&::placeholder {
+			font-size: inherit;
+			color: inherit;
+		}
+	}
+
+	&::-webkit-search-cancel-button {
+		display: none;
+		pointer-events: none;
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	&:-webkit-autofill,
+	&:-webkit-autofill:hover,
+	&:-webkit-autofill:focus,
+	&:-webkit-autofill:active {
+		transition: background-color 500000s ease-in-out 0s !important;
+	}
+}
+
+
+:where(button, [type="button" i], [type="reset" i], [type="submit" i]) {
+	-webkit-appearance: button;
+}
+
+
+:where(fieldset) {
+	border: 1px solid #a0a0a0;
+}
+
+
+:where(progress) {
+	vertical-align: baseline;
+}
+
+
+:where(textarea) {
+	margin: 0; /* 1 */
+	resize: vertical; /* 3 */
+}
+
+
+:where([type="search" i]) {
+	-webkit-appearance: textfield; /* 1 */
+	outline-offset: -2px; /* 2 */
+}
+
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+	height: auto;
+}
+
+
+::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+
+
+::-webkit-file-upload-button {
+	-webkit-appearance: button; /* 1 */
+	font: inherit; /* 2 */
+}
+
+:where( progress, sub, sup  ) {
+	vertical-align: baseline;
+	font-size: 75%;
+	line-height: 0;
+	position: relative
+}
+
+:where(embed, iframe, img, legend, object, pre, details, figure, video, audio, picture) {
+	max-width: 100%;
+	display: block;
+	border: 0;
+	outline: 0
+}
+
+:where(a) {
+	background-color: transparent;
+	text-decoration: unset;
+	color: unset;
+
+	&:active, &:focus, &:hover, &:visited {
+		color: inherit;
+		text-decoration: unset;
+	}
+}
+
+:where(.hide, .hidden, [hidden], .d-none) {
+	display: none
+}

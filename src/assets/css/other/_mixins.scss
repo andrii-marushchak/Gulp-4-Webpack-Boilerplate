@@ -1,8 +1,0 @@
-@mixin transition {
-  transition: 0.3s all ease;
-}
-
-@mixin input-color($color) {
-  color: $color;
-  -webkit-text-fill-color: $color;
-}

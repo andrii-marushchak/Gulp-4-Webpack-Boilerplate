@@ -23,8 +23,3 @@ const setScrollbarWidthCSSVariable = () => {
 });
 
 setScrollbarWidthCSSVariable()
-
-
-
-
-export {setScrollbarWidthCSSVariable}

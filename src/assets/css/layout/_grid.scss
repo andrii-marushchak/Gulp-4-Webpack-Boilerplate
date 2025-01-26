@@ -1,0 +1,26 @@
+.container {
+	width: 100%;
+	max-width: 100%;
+	padding-right: var(--grid-gap);
+	padding-left: var(--grid-gap);
+	margin: 0 auto;
+	@media (max-width: 575px) {
+		width: 100%;
+	}
+
+	@media (min-width: 576px) {
+		width: 100%;
+	}
+
+	@media (min-width: 768px) {
+		width: 720px;
+	}
+
+	@media (min-width: 1025px) {
+		width: 960px;
+	}
+
+	@media (min-width: 1200px) {
+		width: calc(1200px + var(--grid-gap) * 2);
+	}
+}

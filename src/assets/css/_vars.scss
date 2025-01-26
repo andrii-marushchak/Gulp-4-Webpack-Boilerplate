@@ -1,11 +1,51 @@
 :root {
-  
-  // Maximum Width including scrollbar
-  --maxW: calc(100vw - var(--scroll-width));
-  
+	// Maximum Width including browser scrollbar
+	--max-width: calc(100vw - var(--scroll-width));
+
+	// Sizes
+	--grid-gap: 24px;
+	--global-radius: 12px;
+
+	// Typography
+	--font-primary: 'Inter', sans-serif;
+	--font-heading: 'Inter', sans-serif;
+
+	// Colors
+	--bg-color: #fff;
+	--color-text: #000;
+	--color-grey: #ECECEC;
+	--color-primary: #F3E8CE;
+	--color-link: #2d2dba;
+	--color-link-hover: #14142b;
+
+	--color-text-white: #fff;
+
+	--color-dark: #0C0C0C;
+	--color-dark-hover: #272525;
+
+
 }
 
 
-html {
-  accent-color: red;
+// Dark Theme
+[data-color-scheme="dark"] {
+	&:root {
+		--bg-color: #0F0F0F;
+		--color-text: #fff;
+
+	}
 }
+
+
+// Breakpoints
+$grid-breakpoints: (
+	mobile: 575,
+	mobile-large: 640,
+	tablet-small:768,
+	tablet: 1024,
+	tiny--desktop: 1280,
+	small-laptop: 1366,
+	medium-laptop: 1440,
+	FULLHD: 1920,
+	WQHD: 2440,
+);

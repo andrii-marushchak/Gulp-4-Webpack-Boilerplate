@@ -1,0 +1,84 @@
+@use 'sass:math';
+
+@mixin transition {
+	transition: 0.3s all ease;
+}
+
+@mixin input-color($color) {
+	color: $color;
+	-webkit-text-fill-color: $color;
+}
+
+@mixin text-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// No autofill color for inputs
+@mixin no-autofill {
+	&:-webkit-autofill,
+	&:-webkit-autofill:hover,
+	&:-webkit-autofill:focus,
+	&:-webkit-autofill:active {
+		transition: background-color 0s 9999s; // use a really large delay here
+	}
+}
+
+@mixin headings {
+	h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+		@content;
+	}
+}
+
+@mixin hover {
+	@media (hover: hover) {
+		&:hover {
+			@content
+		}
+	}
+	@media (hover: none) {
+		&:active {
+			@content
+		}
+	}
+}
+
+@mixin hover-underline($color: var(--color-primary)) {
+	position: relative;
+	&:before {
+		position: absolute;
+		display: block;
+		content: "";
+		bottom: 0;
+		width: 0;
+		height: 2px;
+		transition: width .55s cubic-bezier(.25, .8, .25, 1) 0s;
+		right: 0;
+		background-color: $color;
+	}
+	&:hover {
+		&:before, & span:not(.menu-item__icon):before {
+			width: 100%;
+			left: 0;
+		}
+	}
+}
+
+
+// https://websemantics.uk/tools/responsive-font-calculator/
+// font-size: clamp(18px, calc(1.125rem + (26 - 18) * ((100vw - 575px) / (1440 - 575))), 26px);
+@function clamp-property($min-size, $max-size, $min-width: 575, $max-width: 1440) {
+	// Ensure the min and max sizes are in px
+	$min-size-px: if(math.is-unitless($min-size), $min-size * 1px, $min-size);
+	$max-size-px: if(math.is-unitless($max-size), $max-size * 1px, $max-size);
+	$min-width-px: if(math.is-unitless($min-width), $min-width * 1px, $min-width);
+	$max-width-px: if(math.is-unitless($max-width), $max-width * 1px, $max-width);
+	@return clamp($min-size-px, calc(1.125rem + ($max-size - $min-size) * ((100vw - $min-width-px) / (1440 - $min-width))), $max-size-px);
+}
+
+@mixin clamp-font-size($min-size, $max-size, $min-width: 575, $max-width: 1440) {
+	font-size: clamp-property($min-size, $max-size, $min-width, $max-width);
+}
+
+
