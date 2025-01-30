@@ -1,91 +1,94 @@
-ul,
-ol {
-	margin-top: 0;
-	margin-left: 0;
-	margin-right: 0;
-	margin-bottom: 20px;
-	padding-left: 30px;
-}
-
-ul {
-	list-style: disc;
-}
-
-ol {
-	list-style: decimal;
-}
-
-li > ul,
-li > ol {
-	margin-bottom: 0;
-}
-
-// Custom lists
-.list-check,
-.list-dot,
-.list-number {
-	list-style: none;
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: column;
-	gap: 8px;
-	padding-left: 0;
-
-	> li {
+.editor {
+	ul,
+	ol {
+		margin-top: 0;
+		margin-left: 0;
+		margin-right: 0;
+		margin-bottom: 20px;
 		padding-left: 30px;
 	}
-}
 
-// Checked list
-.list-check {
-	> li {
-		// icon: check mark (black)
-		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M435.848 83.466L172.804 346.51l-96.652-96.652c-4.686-4.686-12.284-4.686-16.971 0l-28.284 28.284c-4.686 4.686-4.686 12.284 0 16.971l133.421 133.421c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-28.284-28.284c-4.686-4.686-12.284-4.686-16.97 0z'/%3E%3C/svg%3E") no-repeat 0 0.35em / 1em 1em;
+	ul {
+		list-style: disc;
 	}
-}
 
-// Dotted list
-.list-dot {
-	> li {
-		position: relative;
+	ol {
+		list-style: decimal;
+	}
 
-		&:before {
-			content: '';
-			display: block;
-			width: 0.5em;
-			height: 0.5em;
-			background-color: var(--color-primary);
-			border-radius: 50%;
-			position: absolute;
-			top: 0.5em;
-			left: 0.25em;
+	li > ul,
+	li > ol {
+		margin-bottom: 0;
+	}
+
+	// Custom lists
+	.list-check,
+	.list-dot,
+	.list-number {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: column;
+		gap: 8px;
+		padding-left: 0;
+
+		> li {
+			padding-left: 30px;
 		}
 	}
-}
 
-// Numbered list
-.list-number {
-	counter-reset: custom-counter;
-
-	> li {
-		counter-increment: custom-counter;
-		min-height: 1.2em;
-		position: relative;
-
-		&:before {
-			content: counter(custom-counter);
-			width: 1.5em;
-			height: 1.5em;
-			color: var(--color-text);
-			font-size: 0.75em;
-			font-weight: 700;
-			line-height: 1.33;
-			border: 1px solid var(--color-text);
-			border-radius: 50%;
-			text-align: center;
-			position: absolute;
-			top: 0.25em;
-			left: 0;
+	// Checked list
+	.list-check {
+		> li {
+			// icon: check mark (black)
+			background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M435.848 83.466L172.804 346.51l-96.652-96.652c-4.686-4.686-12.284-4.686-16.971 0l-28.284 28.284c-4.686 4.686-4.686 12.284 0 16.971l133.421 133.421c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-28.284-28.284c-4.686-4.686-12.284-4.686-16.97 0z'/%3E%3C/svg%3E") no-repeat 0 0.35em / 1em 1em;
 		}
 	}
+
+	// Dotted list
+	.list-dot {
+		> li {
+			position: relative;
+
+			&:before {
+				content: '';
+				display: block;
+				width: 0.5em;
+				height: 0.5em;
+				background-color: var(--color-primary);
+				border-radius: 50%;
+				position: absolute;
+				top: 0.5em;
+				left: 0.25em;
+			}
+		}
+	}
+
+	// Numbered list
+	.list-number {
+		counter-reset: custom-counter;
+
+		> li {
+			counter-increment: custom-counter;
+			min-height: 1.2em;
+			position: relative;
+
+			&:before {
+				content: counter(custom-counter);
+				width: 1.5em;
+				height: 1.5em;
+				color: var(--color-text);
+				font-size: 0.75em;
+				font-weight: 700;
+				line-height: 1.33;
+				border: 1px solid var(--color-text);
+				border-radius: 50%;
+				text-align: center;
+				position: absolute;
+				top: 0.25em;
+				left: 0;
+			}
+		}
+	}
+
 }
