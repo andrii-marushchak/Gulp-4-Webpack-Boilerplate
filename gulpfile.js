@@ -346,7 +346,8 @@ function files(callback) {
 }
 
 function imgOptimization() {
-	return gulp.src(paths.img.src)
+		return gulp.src(paths.img.src, {encoding: false})
+
 		.pipe(plumber({
 			errorHandler: function (err) {
 				notify.onError({
