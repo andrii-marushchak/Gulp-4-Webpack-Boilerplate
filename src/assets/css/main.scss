@@ -7,21 +7,20 @@
 // Base styles
 @use "general/base";
 @use "general/utility";
+@use "general/fonts";
+@use "general/grid";
 
 // Typography
-@use "typography/fonts";
 @use "typography/editor";
 @use "typography/headings";
 @use "typography/table";
 @use "typography/lists";
-
 
 // Components
 @use "components/buttons";
 @use "components/form-fields";
 
 // layout
-@use "layout/grid";
 @use "layout/footer";
 @use "layout/header";
 
